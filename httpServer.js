@@ -4,43 +4,44 @@ var https = require('https');
 var socketio = require("socket.io");
 var fs = require('fs');
 
-var privateKey = fs.readFileSync('hostkey.pem');
-var certificate = fs.readFileSync('hostcert.pem');
-var credentials = { key: privateKey, cert: certificate };
 
-var app = express();
+// var privateKey = fs.readFileSync('hostkey.pem');
+// var certificate = fs.readFileSync('hostcert.pem');
+// var credentials = { key: privateKey, cert: certificate };
+
+// var httpsServer = https.createServer(credentials, app);
+// app.listen(8443);
+// var io = socketio(httpsServer);
+// httpsServer.listen(7049, socketServerStartUp);
+
+// function socketServerStartUp() {
+//     console.log("socket server started");
+// };
+
+
 
 var server = http.createServer(engine);
-
-var httpsServer = https.createServer(credentials, app);
-app.listen(8443);
-
 function engine() {
     console.log("request received");
 };
 
-//var io = socketio(server);
-//server.listen(7049, socketServerStartUp);
-
-var io = socketio(httpsServer);
-httpsServer.listen(7049, socketServerStartUp);
-
+var io = socketio(server);
+server.listen(7049, socketServerStartUp);
 function socketServerStartUp() {
     console.log("socket server started");
 };
 
+
+var app = express();
 app.listen(6049, appServerStartUp);
 function appServerStartUp() {
     console.log("app server started");
 };
 
-
-
-
 app.use(express.static(__dirname));
 
-app.get("/", render1);
 
+app.get("/", render1);
 function render1(request, response) {
     response.sendFile(__dirname + "/index.html");
 };
@@ -172,7 +173,8 @@ function clientConnected(client) {
     //2-accepted
     //3-rejected
     client.on("initiateCallAction", initiateCallAction)
-    function initiateCallAction(toClientId, patientDetails) {
+    
+    function initiateCallAction(toClientId) {
         var responseCode, responseData;
         console.log("toClientId-" + toClientId);
         if (client.id == toClientId) {
@@ -200,7 +202,7 @@ function clientConnected(client) {
 
         console.log(usersList);
 
-        client.broadcast.to(toClientId).emit('requestingReceiverForCall', client.id, getCurrentClientObj[0].value.userName, toClientId, roomId, patientDetails);
+        client.broadcast.to(toClientId).emit('requestingReceiverForCall', client.id, getCurrentClientObj[0].value.userName, toClientId, roomId );
         io.sockets.emit("receiveUsersList", usersList);
 
         // client.broadcast.to(toClientId).emit('requestingReceiverForCall', client.id,);

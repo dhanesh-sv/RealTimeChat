@@ -114,45 +114,7 @@
                     </div>
 
 
-                </div>
-
-                <div class="col-md-6 col-sm-6 col-xs-12" id="divPatientInformation">
-
-
-                    <div class="col-md-12">
-                        <h3 class="dark-grey">Patient Information</h3>
-
-                        <div class="form-group col-lg-12">
-                            <label>Patient Name</label>
-                            <input class="form-control" id="txtPatientName" value="">
-                        </div>
-
-                        <div class="form-group col-lg-6">
-                            <label>Chief Complaints</label>
-                            <input class="form-control" id="txtchiefComplaints" value="">
-                        </div>
-
-                        <div class="form-group col-lg-6">
-                            <label>Provisional Diagnosis</label>
-                            <input class="form-control" id="txtProvisionalDiagnosis" value="">
-                        </div>
-
-                        <div class="form-group col-lg-6">
-                            <label>Investigations</label>
-                            <input class="form-control" id="txtInvestigations" value="">
-                        </div>
-
-                        <div class="form-group col-lg-6">
-                            <label>Drugs</label>
-                            <input class="form-control" id="txtDrugs" value="">
-                        </div>
-
-                        <div class="form-group col-lg-6  btn btn-info btn-block btn-huge" style="float:right;">
-                            <input type="button" class="form-control" id="txtUpdate" value="Update" onclick="onDataUpdate()">
-                        </div>
-
-                    </div>
-
+                </div>           
 
 
 
@@ -255,8 +217,8 @@
         var videoChatDisplay = document.getElementById('div_VideoSection');
         videoChatDisplay.style.display = 'none';
         chatWindowDisplay.style.display = 'none';
-        //var server = io.connect("ws://localhost:7049");
-        var server = io.connect("https://10.10.10.122:7049");
+        var server = io.connect("ws://192.168.0.103:7049");
+      //  var server = io.connect("https://10.10.10.122:7049");
         server.on("connect", connectToServer);
 
         // var uniqueCallerId,uniqueReceiverId;
@@ -318,8 +280,8 @@
         function initiateCallAction(toClientId) {
             // debugger;
             uniquePartnerId = toClientId;
-            var patientDetails = { 'patientName': txtPatientName.value, 'chiefComplaints': txtchiefComplaints.value, 'investigations': txtInvestigations.value, 'provisionalDiagnosis': txtProvisionalDiagnosis.value, 'drugs': txtDrugs.value }
-            server.emit("initiateCallAction", toClientId, patientDetails);
+           // var patientDetails = { 'patientName': ' ', 'chiefComplaints': txtchiefComplaints.value, 'investigations': txtInvestigations.value, 'provisionalDiagnosis': txtProvisionalDiagnosis.value, 'drugs': txtDrugs.value }
+            server.emit("initiateCallAction", toClientId);
         };
 
 
@@ -351,17 +313,12 @@
 
         //ask the receiver to accept the call
         server.on("requestingReceiverForCall", requestingReceiverForCall);
-        function requestingReceiverForCall(callerId, callerName, receiverId, roomId, patientDetails) {
+        function requestingReceiverForCall(callerId, callerName, receiverId, roomId) {
             var receiverConfirmation = confirm("User " + callerName + " requsting for a call,Do you want to accept?");
             //debugger;
             server.emit("callRequestResponse", receiverConfirmation, callerId, receiverId, roomId);
             if (receiverConfirmation == true) {
                 chatWindowDisplay.style.display = 'block';
-                txtPatientName.value = patientDetails.patientName;
-                txtchiefComplaints.value = patientDetails.chiefComplaints;
-                txtInvestigations.value = patientDetails.investigations;
-                txtProvisionalDiagnosis.value = patientDetails.provisionalDiagnosis;
-                txtDrugs.value = patientDetails.drugs;
                 enableControls();
                 uniquePartnerId = callerId;
             } else {
@@ -491,11 +448,7 @@
         server.on("onPartnerDataUpdate", onPartnerDataUpdate);
         function onPartnerDataUpdate(patientDetails) {
             alert("Partner updated the patient details which will be loaded into your document.")
-            txtPatientName.value = patientDetails.patientName;
-            txtchiefComplaints.value = patientDetails.chiefComplaints;
-            txtInvestigations.value = patientDetails.investigations;
-            txtProvisionalDiagnosis.value = patientDetails.provisionalDiagnosis;
-            txtDrugs.value = patientDetails.drugs;
+           
         };
     </script>
     <!--<script src="Scripts/chatWindow.js"></script>-->
