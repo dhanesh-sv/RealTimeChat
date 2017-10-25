@@ -6,8 +6,7 @@
 
 .chat_window {
   position: absolute;
-  width: calc(100% - 20px);
-  max-width: 300px;
+  width:700px; 
   height:450px;
   border-radius: 10px;
   background-color: #fff;
@@ -172,7 +171,7 @@
   cursor: pointer;
   transition: all 0.2s linear;
   text-align: center;
-  float: right;
+  
 }
 .bottom_wrapper .send_message:hover {
   color: #a3d063;

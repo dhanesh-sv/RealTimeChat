@@ -3,6 +3,11 @@ var http = require("http");
 var https = require('https');
 var socketio = require("socket.io");
 var fs = require('fs');
+var path=require('path');
+//var routes = require('./routes/index');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+
 
 
 // var privateKey = fs.readFileSync('hostkey.pem');
@@ -38,8 +43,9 @@ function appServerStartUp() {
     console.log("app server started");
 };
 
-app.use(express.static(__dirname));
+ 
 
+app.use(express.static(__dirname));
 
 app.get("/", render1);
 function render1(request, response) {
