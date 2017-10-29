@@ -289,7 +289,7 @@
         function initiateCallAction(toClientId) {
             // debugger;
             uniquePartnerId = toClientId;
-            // var patientDetails = { 'patientName': ' ', 'chiefComplaints': txtchiefComplaints.value, 'investigations': txtInvestigations.value, 'provisionalDiagnosis': txtProvisionalDiagnosis.value, 'drugs': txtDrugs.value }
+           
             server.emit("initiateCallAction", toClientId);
         };
 
