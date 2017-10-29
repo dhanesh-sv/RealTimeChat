@@ -8,7 +8,10 @@ var path=require('path');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var mongoClient=require('mongodb').MongoClient;
 
+/**Variable Declarations */
+var mongoDbObj;
 
 // var privateKey = fs.readFileSync('hostkey.pem');
 // var certificate = fs.readFileSync('hostcert.pem');
@@ -45,12 +48,64 @@ function appServerStartUp() {
 
  
 
+//app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(__dirname));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+
 
 app.get("/", render1);
 function render1(request, response) {
+
+    mongoDbObj.users_Collection.find().toArray(function(err, data){
+        if(err){
+          console.log(err);}
+        else{
+          //operate with the deta
+          console.log(data);
+        }
+      });
+
     response.sendFile(__dirname + "/index.html");
 };
+
+/**Mongo DB Connection */
+mongoClient.connect("mongodb://localhost:27017/chat",function(err,db){
+    if(err)throw err;
+    else{
+    
+        console.log("connected to mongoDb");
+        mongoDbObj={db: db,
+            users_Collection: db.collection('users')
+          };
+        //  console.log(mongoDbObj.users_Collection.find({userId:1}));
+    }
+});
+/**Mongo DB Connection */
+
+/**code behind Operations */
+app.post("/login",validateLoginCredentials);
+function validateLoginCredentials(req,res){
+    debugger;
+ mongoDbObj.users_Collection.find({'userName':req.body.userName,'password':req.body.password}).toArray(function(err, data){
+    if(err){
+      console.log(err);
+      res.send(false);
+    }
+    else{
+        res.send(data);
+    }
+  });
+};
+
+/**code behind Operations */
+
+
+/**Mongo DB Operations */
+
+/**Mongo DB Operations */
+
+
 
 var usersList = [];
 var chatRooms = [];

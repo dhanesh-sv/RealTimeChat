@@ -5,8 +5,8 @@
     <title>Real Time Communication - Client</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link href="Content/usersList.css" rel="stylesheet" />
-    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="public/Content/usersList.css" rel="stylesheet" />
+    <link href="public/Content/bootstrap.min.css" rel="stylesheet" />
     <style type="text/css">
         body,
         input {
@@ -65,8 +65,8 @@
             position: absolute;
         }
     </style>
-    <link href="Content/chatWindow.css" rel="stylesheet" />
-    <script src="Scripts/bootstrap.js"></script>
+    <link href="public/Content/chatWindow.css" rel="stylesheet" />
+    <script src="public/Scripts/bootstrap.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             debugger;
@@ -82,10 +82,11 @@
     <div class="container-fluid">
         <h1>Real Time Communication - Client</h1>
         <div id="div1">
-            Userid:
-            <input type="text" id="txtuserid" value="" autofocus="autofocus"> Username:
-            <input type="text" id="txtusername" value="" autofocus="autofocus">
-            <input type="submit" style="width:80px;height:32px;" value="Join" id="btnjoin" onclick="joinComm(txtusername.value, txtuserid.value)">
+            <!-- Userid: -->
+            <input type="hidden" id="txtuserid"  value="" autofocus="autofocus">
+             Username:
+            <input type="text" id="txtusername" disabled="disabled" value="" autofocus="autofocus">
+            <!-- <input type="submit" style="width:80px;height:32px;" value="Join" id="btnjoin" onclick="joinComm(txtusername.value, txtuserid.value)"> -->
             <!--<input type="submit" style="width:280px;height:32px;" value="Check Connection bw Clients" id="btnjoin" onclick="sendMessage()">-->
 
             <div id="currentUser" style="float:right;background-color:azure;"></div>
@@ -163,12 +164,12 @@
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <form id="login-form" action="https://phpoll.com/login/process" method="post" role="form" style="display: block;">
+                                        <form id="login-form"  method="post" role="form" style="display: block;">
                                             <div class="form-group">
-                                                <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
+                                                <input type="text" name="username" id="login_username" tabindex="1" class="form-control" placeholder="Username" value="">
                                             </div>
                                             <div class="form-group">
-                                                <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
+                                                <input type="password" name="password" id="login_password" tabindex="2" class="form-control" placeholder="Password">
                                             </div>
 
                                             <div class="form-group">
@@ -180,23 +181,23 @@
                                             </div>
 
                                         </form>
-                                        <form id="register-form" action="https://phpoll.com/register/process" method="post" role="form" style="display: none;">
+                                        <form id="register-form"  method="post" role="form" style="display: none;">
                                             <div class="form-group">
-                                                <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
+                                                <input type="text" name="username" id="register_username" tabindex="1" class="form-control" placeholder="Username" value="">
                                             </div>
                                             <div class="form-group">
-                                                <input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="">
+                                                <input type="email" name="email" id="register_email" tabindex="1" class="form-control" placeholder="Email Address" value="">
                                             </div>
                                             <div class="form-group">
-                                                <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
+                                                <input type="password" name="password" id="register_password" tabindex="2" class="form-control" placeholder="Password">
                                             </div>
                                             <div class="form-group">
-                                                <input type="password" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
+                                                <input type="password" name="confirm-password" id="register_confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
                                             </div>
                                             <div class="form-group">
                                                 <div class="row">
                                                     <div class="col-sm-6 col-sm-offset-3">
-                                                        <input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Register Now">
+                                                        <input type="submit" name="register-submit" id="register_register-submit" tabindex="4" class="form-control btn btn-register" value="Register Now">
                                                     </div>
                                                 </div>
                                             </div>
@@ -215,22 +216,22 @@
 
     </div>
 
-
+    
+    
 
     <!--<script src="node_modules/socket.io/node_modules/socket.io-client/dist/socket.io.js"></script>-->
     <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
-    <script src="Scripts/adapter.js"></script>
+    <script src="public/Scripts/adapter.js"></script>
     <script>
         var chatWindowDisplay = document.getElementById('div_chatWindow');
-
-
-        chatWindowDisplay.style.display = 'none';
-        var server = io.connect("ws://192.168.0.103:7049");
-        //  var server = io.connect("https://10.10.10.122:7049");
-        server.on("connect", connectToServer);
-
-        // var uniqueCallerId,uniqueReceiverId;
         var uniquePartnerId;
+        chatWindowDisplay.style.display = 'none';
+        var server = io.connect("ws://192.168.0.100:7049");
+        //  var server = io.connect("https://10.10.10.122:7049");
+
+
+        server.on("connect", connectToServer);      
+        
 
         function connectToServer() {
             console.log("connected to Server!");
@@ -252,7 +253,7 @@
             $('#userliList').empty();
             var myli = '';
             $.each(usersList, function (i, item) {
-                // debugger;
+                 debugger;
                 var userBusyStatus;
                 var disabledStaus;
                 if (item.value.isbusy == 0) {
@@ -268,11 +269,11 @@
                 //if (item.value.inCall == 0 && item.value.userId==txtuserid.value) {
                 //    clearMessages();
                 //}
-
-                if (item.value.userId != txtuserid.value) {
+                   debugger;
+                if (item.value.userName != txtusername.value) {
                     //pointer-events: none;
                     // myli += "<li id='" + item.value.socketId + "' class='list-group-item'><span class='glyphicon glyphicon-user text-" + userBusyStatus + "'></span>" + item.value.userName + "<span id='" + item.value.socketId + "' style='float:right;cursor:pointer;' class='glyphicon glyphicon-earphone text-" + userBusyStatus + "' " + disabledStaus + "  onclick='initiateCallAction(this.id)'></span></li>";
-                    myli += "<li id='" + item.value.socketId + "' class='list-group-item'><span class='glyphicon glyphicon-user text-" + userBusyStatus + "'></span>" + item.value.userName + "<span id='" + item.value.socketId + "' style='float:right;cursor:pointer;" + disabledStaus + "' class='glyphicon glyphicon-earphone text-" + userBusyStatus + "'  onclick='initiateCallAction(this.id)'></span></li>";
+                    myli += "<li id='" + item.value.socketId + "' class='list-group-item'><span class='glyphicon glyphicon-user text-" + userBusyStatus + "'></span>" + item.value.userName + "<span id='" + item.value.socketId + "' style='float:right;cursor:pointer;" + disabledStaus + "' class='glyphicon glyphicon-envelope text-" + userBusyStatus + "'  onclick='initiateCallAction(this.id)'></span></li>";
                 } else {
                     var a = "<span class='glyphicon glyphicon-user text-" + userBusyStatus + "'>" + item.value.userName + "</span>";
                     document.getElementById('currentUser').innerHTML = a;
@@ -898,6 +899,52 @@
 
 
     </script>
+
+
+<!-- Form Operations-->
+<script src="public/jsDataContracts/loginFormData.js"></script>
+<script>
+    $('#login-submit').click(login_click);
+    $('#register-submit').click(register_click);
+    //  Login 
+    debugger;
+    
+    function login_click(event){
+        event.preventDefault();
+        debugger;
+        var formData={"userName":$('#login_username').val(),"password":$('#login_password').val()}
+        console.log($('#login_username').val()+','    +$('#login_password').val())
+        var formData2= new loginFormData($('#login_username').val(),$('#login_password').val());
+        debugger;
+        $.ajax({type:"POST",'Content-Type': 'application/x-www-form-urlencoded',url:"/login",success:login_success_fn,error:login_error_fn,data:formData2});
+    };
+    function login_success_fn(response){
+        if(response.length>0){
+            debugger;
+            console.log('Login Success');
+            joinComm(response["0"].userName,response["0"].userId);
+            txtusername.value=response["0"].userName;
+            txtuserid.value=response["0"].userId;
+            $('#loginModal').modal('hide');
+            
+        }else{
+            console.log('Login Failed');
+            alert('Username or Password is incorrect!')
+        }
+    
+    };
+    function login_error_fn(response){
+    console.log('Login Failed');
+    };
+    //  Login
+    //register
+    function register_click(event){
+        event.preventDefault();
+        var formData={}
+    }
+    //register
+    </script>
+    <!-- Form Operations-->
 </body>
 
 </html>

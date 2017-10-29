@@ -1,0 +1,11 @@
+{
+	"compilerOptions":
+	{
+		"target": "es5",
+		"removeComments": true,
+        "sourceMap": true,
+        "baseUrl": "./public/typeScript/",
+        "outDir":"./public/jsDataContracts/"
+	}
+	
+}
